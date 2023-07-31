@@ -1,0 +1,10 @@
+package in.shrihari.utils;
+
+import org.springframework.stereotype.Component;
+
+import lombok.extern.apachecommons.CommonsLog;
+
+@Component
+public class EmailUtils {
+
+}

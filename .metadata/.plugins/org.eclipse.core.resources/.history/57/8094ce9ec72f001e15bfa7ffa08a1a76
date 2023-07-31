@@ -1,0 +1,13 @@
+package in.shrihari.repo;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import in.shrihari.entity.UserDetailsEntity;
+
+public interface UserDtlsRepo extends JpaRepository<UserDetailsEntity, Integer> {
+
+	 @Query("SELECT u FROM UserDetailsEntity u WHERE u.email = :email")
+	 public UserDetailsEntity findByEmail(String email);
+	
+
+}

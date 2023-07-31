@@ -1,0 +1,14 @@
+package in.shrihari.controller;
+
+import org.springframework.stereotype.Controller;
+
+@Controller
+public class EnquiryController {
+
+	@GetMapping("/enquiry")
+	public String dashboardPage() {
+		
+		return "add-enquiry";
+	}
+	
+}

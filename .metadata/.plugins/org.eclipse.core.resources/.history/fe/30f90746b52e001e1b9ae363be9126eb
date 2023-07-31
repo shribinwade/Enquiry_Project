@@ -1,0 +1,44 @@
+package in.shrihari.service;
+
+import in.shrihari.binding.LoginForm;
+import in.shrihari.binding.SignUpForm;
+import in.shrihari.binding.UnlockForm;
+import in.shrihari.utils.PwdUtils;
+
+public class UserServiceImpl implements UserService {
+
+	@Override
+	public String Login(LoginForm form) {
+		// TODO 
+		return null;
+	}
+
+	@Override
+	public boolean signUp(SignUpForm form) {
+		//TODO:copy data from binding object to entity obj
+		
+		// TODO generate random pwd
+		String generateRandomPwd = PwdUtils.generateRandomPwd();
+		
+		// TODo: set acc status as locked
+		
+		// TODO: insert record
+		
+		//TODO:send email to unlock the account
+		
+		return false;
+	}
+
+	@Override
+	public boolean unlock(UnlockForm form) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public String forgotPws(String email) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+}

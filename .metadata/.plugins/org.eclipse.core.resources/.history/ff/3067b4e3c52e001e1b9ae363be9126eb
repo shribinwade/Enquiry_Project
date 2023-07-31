@@ -1,0 +1,66 @@
+package in.shrihari.service;
+
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import in.shrihari.binding.LoginForm;
+import in.shrihari.binding.SignUpForm;
+import in.shrihari.binding.UnlockForm;
+import in.shrihari.entity.UserDetailsEntity;
+import in.shrihari.repo.StudentEnqRepo;
+import in.shrihari.repo.UserDtlsRepo;
+import in.shrihari.utils.EmailUtils;
+import in.shrihari.utils.PwdUtils;
+
+@Service
+public class UserServiceImpl implements UserService {
+
+	@Autowired
+	private UserDtlsRepo userDtlsRepo;
+	
+	@Autowired
+	private EmailUtils emailutils;
+	
+	@Override
+	public String Login(LoginForm form) {
+		// TODO 
+		return null;
+	}
+
+	@Override
+	public boolean signUp(SignUpForm form) {
+		//TODO:copy data from binding object to entity obj
+		UserDetailsEntity entity = new UserDetailsEntity();
+		BeanUtils.copyProperties(form, entity);
+		
+		// TODO generate random pwd
+		String generateRandomPwd = PwdUtils.generateRandomPwd();
+		
+		// TODo: set acc status as locked
+		entity.setAccstatus("LOCKED");
+		// TODO: insert record
+		userDtlsRepo.save(entity);
+		
+		//TODO:send email to unlock the account
+		
+		String to= form.getEmail();
+		String subject = "Unlock Your Account "; 
+		String body="<h1>Use temporary password to unlock your account</h1>";
+		EmailUtils.sendEmail(to,subject,body);
+		return false;
+	}
+
+	@Override
+	public boolean unlock(UnlockForm form) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public String forgotPws(String email) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+}

@@ -1,0 +1,5 @@
+package in.shrihari.service;
+
+public interface EnquiryService {
+
+}

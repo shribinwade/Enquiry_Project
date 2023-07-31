@@ -1,0 +1,17 @@
+package in.shrihari.entity;
+
+import javax.persistence.Entity;
+
+import lombok.Data;
+
+@Entity
+@Data
+public class UserDetailsEntity {
+
+	public Integer UserID;
+	public String UserName;
+	public String UserEmail;
+	public Integer UserPhone;
+	public String Pwd;
+
+}

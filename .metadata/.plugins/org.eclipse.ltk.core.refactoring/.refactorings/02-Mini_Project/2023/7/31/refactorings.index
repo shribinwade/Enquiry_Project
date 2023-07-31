@@ -1,0 +1,8 @@
+1690706477671	Extract local variable 'generateRandomPwd'
+1690709417935	Extract local variable 'createMimeMessage'
+1690709472324	Extract local variable 'mimeMessageHelper'
+1690782590065	Extract local variable 'sendEmail'
+1690798007737	Delete element
+1690815995569	Delete element
+1690816926096	Delete element
+1690823506018	Extract local variable 'user'

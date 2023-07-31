@@ -1,0 +1,5 @@
+package in.shrihari.entity;
+
+public class CoursesEntity {
+
+}
