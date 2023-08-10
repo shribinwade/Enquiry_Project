@@ -1,5 +1,7 @@
 package in.shrihari.service;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,7 +16,10 @@ import in.shrihari.utils.PwdUtils;
 
 @Service
 public class UserServiceImpl implements UserService {
-
+   
+	@Autowired
+	private HttpSession session;
+	
 	@Autowired
 	private UserDtlsRepo userDtlsRepo;
 
@@ -23,8 +28,20 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public String Login(LoginForm form) {
-		// TODO
-		return null;
+		
+		UserDetailsEntity entity = userDtlsRepo.findByEmailAndPwd(form.getEmail(),form.getPwd());
+		if(entity == null) {
+			return "Invalid Credentials or Email not found ";
+		}
+		if(entity.accStatus.equals("LOCKED")) {
+			return "Your account is locked please unlocked than retry ";
+		}
+		
+		//Create Session and store user data in session
+		session.setAttribute("userId", entity.getUserId());
+		
+			return "success";	
+		
 	}
 
 	@Override
@@ -68,15 +85,45 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public boolean unlock(UnlockForm form) {
+	public boolean unlockAccount(UnlockForm form) {
 		// TODO Auto-generated method stub
-		return false;
+		UserDetailsEntity entity = userDtlsRepo.findByEmail(form.getEmail());
+		
+		if(entity.getPwd().equals(form.getTempPwd())) {
+			entity.setAccStatus("UnLocked");
+			entity.setPwd(form.getNewPwd());
+			userDtlsRepo.save(entity);
+			return true;
+		}else {
+			return false;
+
+		}
+		
 	}
 
+
+	
+
 	@Override
-	public String forgotPws(String email) {
+	public String forgotPwd(String email) {
 		// TODO Auto-generated method stub
-		return null;
+		
+		//cheking email is valid or not
+		UserDetailsEntity entity = userDtlsRepo.findByEmail(email);
+
+		if(entity==null) {
+			System.out.println("failed");
+			return "Email is invalid";
+			
+		}
+		String Subject="Recover Passsword";
+		String body="Your Password: "+ entity.getPwd();
+		emailutils.sendEmail(email, Subject, body);
+		System.out.println("true");
+		
+		return "success";
 	}
+
+	
 
 }

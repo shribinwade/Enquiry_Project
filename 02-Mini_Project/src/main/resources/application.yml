@@ -1,13 +1,4 @@
-security:
-  require-ssl: true
-server:
-  ssl:
-    enabled: true
-    key-alias: local_ssl
-    key-password: 123456
-    key-store: src/main/resources/local-ssl.p12
-    key-store-password: 123456
-    key-store-type: PKCS12
+
 
 spring:
   datasource:

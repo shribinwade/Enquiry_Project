@@ -1,5 +1,9 @@
 package in.shrihari.repo;
 
-public interface StudentEnqRepo {
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import in.shrihari.entity.StudentEnqEntity;
+
+public interface StudentEnqRepo extends JpaRepository<StudentEnqEntity, Integer>{
 
 }
