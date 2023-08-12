@@ -10,9 +10,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import in.shrihari.binding.DashboardResponse;
 import in.shrihari.binding.EnquiryForm;
+import in.shrihari.binding.EnquirySearchCriteria;
+import in.shrihari.entity.StudentEnqEntity;
 import in.shrihari.service.EnquiryService;
 
 @Controller
@@ -23,6 +26,26 @@ public class EnquiryController {
 	@Autowired
 	private HttpSession session;
 
+	private void initForm(Model model) {
+
+		// get Courses for drop down
+		List<String> courses = enqService.getCourseName();
+
+		// get enq status for drop down
+
+		List<String> enqStatuses = enqService.getEnqStatus();
+
+		// create binding class obj
+		EnquiryForm formObj = new EnquiryForm();
+
+		// set data in model obj
+		model.addAttribute("courseNames", courses);
+
+		model.addAttribute("enqStatusNames", enqStatuses);
+
+		model.addAttribute("formObj", formObj);
+	}
+
 	@GetMapping("/logout")
 	public String logout() {
 		session.invalidate();
@@ -32,60 +55,76 @@ public class EnquiryController {
 	@GetMapping("/dashboard")
 	public String dashboardPage(Model model) {
 
-	Integer userId = (Integer) session.getAttribute("userId");
+		Integer userId = (Integer) session.getAttribute("userId");
 //
 		DashboardResponse dashboardData = enqService.getDashboardResponse(userId);
-		
-		model.addAttribute("dashboardData",dashboardData);
-		
+
+		model.addAttribute("dashboardData", dashboardData);
+
 		return "dashboard";
 	}
 
 	@GetMapping("/enquiry")
 	public String addEnquiryPage(Model model) {
-		
-		//get Courses for drop down
-		List<String> courses = enqService.getCourseName();
-		
-		//get enq status for drop down
-		
-		List<String> enqStatuses = enqService.getEnqStatus();
-		
-		//create binding class obj
-		EnquiryForm formObj = new EnquiryForm();
-		
-		//set data in model obj
-		model.addAttribute("courseNames",courses);
-		
-		model.addAttribute("enqStatusNames",enqStatuses);
-		
-		model.addAttribute("formObj",formObj);
 
-		
+		// get Courses for drop down
+		List<String> courses = enqService.getCourseName();
+
+		// get enq status for drop down
+
+		List<String> enqStatuses = enqService.getEnqStatus();
+
+		// create binding class obj
+		EnquiryForm formObj = new EnquiryForm();
+
+		// set data in model obj
+		model.addAttribute("courseNames", courses);
+
+		model.addAttribute("enqStatusNames", enqStatuses);
+
+		model.addAttribute("formObj", formObj);
+
 		return "add-enquiry";
 	}
 
-	
-	
 	@PostMapping("/addEnq")
 	public String addEnquiry(@ModelAttribute("formObj") EnquiryForm formObj, Model model) {
-		
+
 		System.out.println(formObj);
 		boolean status = enqService.saveEnquiry(formObj);
-		if(status) {
-			model.addAttribute("succMsg","Enquiry added");
-			
-		}else {
-			model.addAttribute("errMsg","Problem Occured");
+		if (status) {
+			model.addAttribute("succMsg", "Enquiry added");
+
+		} else {
+			model.addAttribute("errMsg", "Problem Occured");
 		}
-		
+
 		return "add-enquiry";
 	}
-	
-	
+
 	@GetMapping("/enquires")
 	public String viewEnquiriesPage(Model model) {
+		
+		initForm(model);
+		List<StudentEnqEntity> enquiries = enqService.getEnquiries();
+		model.addAttribute("enquiries", enquiries);
 		return "view-enquiries";
 	}
 
+@GetMapping("/filter-enquiries")	
+	public String getFilteredEnqs(
+			@RequestParam  String cname,
+			@RequestParam String status,
+			@RequestParam String mode,Model model)
+	{
+		EnquirySearchCriteria criteria  = new EnquirySearchCriteria();
+		criteria.setCourseName(cname);
+		criteria.setEnqStatus(status);
+		criteria.setClassMode(mode);
+		Integer userId = (Integer) session.getAttribute("userId");
+
+		List<StudentEnqEntity> filteredEnqs = enqService.getFilteredEnqs(criteria, userId);
+		model.addAttribute("enq",filteredEnqs);
+		return "filter-enquiries-page";
+	}
 }

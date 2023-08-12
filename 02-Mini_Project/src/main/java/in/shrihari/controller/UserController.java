@@ -12,7 +12,6 @@ import in.shrihari.binding.LoginForm;
 import in.shrihari.binding.SignUpForm;
 import in.shrihari.binding.UnlockForm;
 import in.shrihari.service.UserService;
-import in.shrihari.service.UserServiceImpl;
 
 @Controller
 public class UserController {

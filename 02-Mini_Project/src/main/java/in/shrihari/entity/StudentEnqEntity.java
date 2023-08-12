@@ -28,7 +28,7 @@ public class StudentEnqEntity {
 	
 	private Long studentPhno;
 	
-	private String classmode;
+	private String classMode;
 	
 	private String courseName;
 	

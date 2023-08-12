@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 
 import in.shrihari.binding.DashboardResponse;
 import in.shrihari.binding.EnquiryForm;
+import in.shrihari.binding.EnquirySearchCriteria;
 import in.shrihari.entity.CoursesEntity;
 import in.shrihari.entity.EnqStatusEntity;
 import in.shrihari.entity.StudentEnqEntity;
@@ -30,13 +31,13 @@ public class EnquiryServiceImpl implements EnquiryService {
 
 	@Autowired
 	private StudentEnqRepo enqRepo;
-	
+
 	@Autowired
 	private CourseRepo coursesRepo;
 
 	@Autowired
 	private EnqStatusRepo statusRepo;
-	
+
 	@Autowired
 	private HttpSession session;
 
@@ -54,7 +55,7 @@ public class EnquiryServiceImpl implements EnquiryService {
 			List<StudentEnqEntity> enquiries = userEntity.getEnquiries();
 
 			Integer size = enquiries.size();
-                                                                                       
+
 			Integer enrolledCnt = enquiries.stream().filter(e -> e.getEnqStatus().equals("Enrolled"))
 					.collect(Collectors.toList()).size();
 
@@ -92,23 +93,74 @@ public class EnquiryServiceImpl implements EnquiryService {
 		for (EnqStatusEntity entity : findAll) {
 			statusList.add(entity.getStatusName());
 		}
-		
+
 		return statusList;
 	}
 
 	@Override
 	public boolean saveEnquiry(EnquiryForm form) {
-		
+
 		StudentEnqEntity entity = new StudentEnqEntity();
 		BeanUtils.copyProperties(form, entity);
-		
-		Integer userId =(Integer) session.getAttribute("userId");
+
+		Integer userId = (Integer) session.getAttribute("userId");
 		UserDetailsEntity userEntity = userDtlsRepo.findById(userId).get();
+
 		entity.setUser(userEntity);
-		
+
 		enqRepo.save(entity);
-		
+
 		return true;
+	}
+
+	@Override
+	public List<StudentEnqEntity> getEnquiries() {
+		// TODO Auto-generated method stub
+		Integer userId = (Integer) session.getAttribute("userId");
+		Optional<UserDetailsEntity> findById = userDtlsRepo.findById(userId);
+
+		if (findById.isPresent()) {
+			UserDetailsEntity userDtlsEntity = findById.get();
+			List<StudentEnqEntity> enquiries = userDtlsEntity.getEnquiries();
+			return enquiries;
+		}
+		return null;
+	}
+
+	@Override
+	public List<StudentEnqEntity> getFilteredEnqs(EnquirySearchCriteria criteria, Integer userId) {
+	
+		Optional<UserDetailsEntity> findById = userDtlsRepo.findById(userId);
+
+		if (findById.isPresent()) {
+			UserDetailsEntity userDtlsEntity = findById.get();	
+			List<StudentEnqEntity> enquiries = userDtlsEntity.getEnquiries();
+			
+			//filter logic
+			if(null != criteria.getCourseName() && !"".equals(criteria.getCourseName())) 
+			{
+				enquiries = enquiries.stream()
+				.filter(e -> e.getCourseName().equals(criteria.getCourseName()))
+				.collect(Collectors.toList());
+							
+			}
+			if(null != criteria.getEnqStatus() && !"".equals(criteria.getEnqStatus())) {
+				enquiries = enquiries.stream()
+				.filter(e -> e.getEnqStatus().equals(criteria.getEnqStatus()))
+				.collect(Collectors.toList());
+				
+						
+			}
+			if(null != criteria.getClassMode() && !"".equals(criteria.getClassMode())) {
+				enquiries =	enquiries.stream()
+				.filter(e -> e.getClassMode().equals(criteria.getClassMode()))
+				.collect(Collectors.toList());	
+				
+			}
+			return enquiries;
+		}
+	
+		return null;
 	}
 
 }
