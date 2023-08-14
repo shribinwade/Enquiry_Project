@@ -2,6 +2,7 @@ package in.shrihari.entity;
 
 import java.time.LocalDate;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -35,6 +36,7 @@ public class StudentEnqEntity {
 	private String enqStatus;
 	
 	@CreationTimestamp
+	@Column(updatable = false)
 	private LocalDate dateCreated;
 	
 	@UpdateTimestamp

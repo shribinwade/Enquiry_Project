@@ -6,7 +6,7 @@
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, shrink-to-fit=no" />
 <meta http-equiv="x-ua-compatible" content="ie=edge" />
-<title>Ashok IT - Enquiry</title>
+<title>Edit - Enquiry</title>
 <!-- MDB icon -->
 <link rel="icon" href="img/mdb-favicon.ico" type="image/x-icon" />
 <!-- Font Awesome -->
@@ -54,14 +54,14 @@
 								<div class="card-body p-md-5 mx-md-4">
 
 									<div class="text-center">
-										<h4 class="mt-1 mb-5 pb-1">Add Student Enquriy Here</h4>
+										<h4 class="mt-1 mb-5 pb-1">edit Student Enquriy Here</h4>
 									</div>
 
 									<p th:text="${errMsg}" class="text-danger" />
 									<p th:text="${succMsg}" class="text-success" />
+ 
 
-
-									<form th:action="@{/addEnq}" th:object="${formObj}"
+									<form th:action="@{/edit}" th:object="${formObj}"
 										method="post">
 										<div class="form-outline mb-4">
 											<input type="text" id="form2Example11" class="form-control"
@@ -97,7 +97,7 @@
 
 											</select>
 										</div>
-
+										
 										<div class="form-outline mb-4">
 											<label class="form-label" for="form2Example22">Enquiry
 												Status</label> <select id="form2Example22" class="form-select"
@@ -105,19 +105,20 @@
 												<option value="">-Select-</option>
 												<option th:each="status : ${enqStatusNames}"
 													th:value="${status}" th:text="${status}"></option>
+
+
 											</select>
 										</div>
-										
-
+ 
 										<div class="text-center pt-1 mb-5 pb-1">
 											<input type="submit"
 												class="btn btn-primary btn-block fa-lg gradient-custom-2 mb-3"
 												value="Submit" />
 										</div>
-										<input type="hidden" th:field="*{enqId}" />
+
 
 									</form>
-
+ -->
 								</div>
 							</div>
 							<div class="col-lg-6 d-flex align-items-center gradient-custom-2">
